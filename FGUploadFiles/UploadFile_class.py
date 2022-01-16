@@ -5,8 +5,8 @@ import os
 def description(df):
 
     counter = 0
-    for row in df['Unnamed: 1'].fillna('N'):
-        if row != 'N':
+    for row in df['Unnamed: 1'].fillna(''):
+        if row != '':
             break
         counter +=1
 
@@ -20,8 +20,8 @@ def description(df):
 
 def jp_data(df):
     counter = 0
-    for row in df['Unnamed: 1'].fillna('N'):
-        if row != 'N':
+    for row in df['Unnamed: 1'].fillna(''):
+        if row != '':
             break
         counter +=1
 
