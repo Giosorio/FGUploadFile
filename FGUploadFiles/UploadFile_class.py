@@ -62,26 +62,6 @@ class UploadFile:
     def __init__(self, df):
         self.description = description(df)
         self.content = jp_data(df)
-        
-
-
-    def datetime_columns(self, date_cols='list_of_columns' ,date_format='%d/%m/%Y'):
-        """Since the df was created from an excel file that later was splited between description and data.
-        All data values are type 'object' and cannot be transform into a datetime format"""
-
-        df = self.content
-        data_type_col = dict(df.dtypes)
-        for col in date_cols:
-            if data_type_col[col] != 'datetime64[ns]':
-                # df[col] = df[col].astype('datetime64')
-                df[col] = pd.to_datetime(df[col], errors='ignore')
-
-
-        for col in date_cols:
-            df[col] = df[col].dt.strftime(date_format)
-        
-        self.content = df
-
 
 
     @property
