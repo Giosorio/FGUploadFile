@@ -4,4 +4,5 @@ Class UploadFile creates an object UploadFile that allows to to split the descri
 
 # HOW TO IMPORT
 import pandas as pd
+
 from FGUploadFiles import uploadfile as upf
