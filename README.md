@@ -1,1 +1,2 @@
-    description='Class UploadFile that allows to manipulate Fieldglass Upload Files, Spliting the Description from the content and allows you to concatenate them again',
+# FGuploadfile
+Class UploadFile creates an object UploadFile that allows to to split the description and content from a Fieldglass upload file. Once the content has been modified it allows you to concatenate the description again.
