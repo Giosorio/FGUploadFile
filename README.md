@@ -1,4 +1,4 @@
-# FGuploadfile
+# FGUploadFile
 Class UploadFile creates an object UploadFile that allows to to split the description and content from a Fieldglass upload file. Once the content has been modified it allows you to concatenate the description again.
 
 
@@ -32,6 +32,7 @@ print(upf_1.description)
 ## Content
 ```
 print(upf_1.content)
+
                                  Modification Type  ...          Legal Entity
 7                                                A  ...        Legal_Entity_1
 8                                                A  ...        Legal_Entity_2
@@ -43,6 +44,7 @@ print(upf_1.content)
 ## Complete, concatenate Description and Content
 ```
 print(upf_1.complete)
+
                          Type=Business Unit Upload  ...                              
 0                                 Transaction=True  ...                   NaN
 1                 Language=English (United States)  ...                   NaN
@@ -56,7 +58,9 @@ print(upf_1.complete)
 9                                                A  ...        Legal_Entity_3
 10                                               A  ...        Legal_Entity_4
 
-
+```
+# HOW TO INSTALL IN YOUR ENVIRONMENT
 
 ```
-
+pip install git+https://github.com/Giosorio/FGUploadFile@[VERSION -- Check in Tags of the repository]
+```
