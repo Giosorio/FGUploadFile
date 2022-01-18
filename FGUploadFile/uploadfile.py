@@ -45,11 +45,10 @@ def jp_data(df):
     return jp_data
 
 
-def delete_extra_columns_description(jpt_complete, data):
-    
-    jpt_complete.drop(jpt_complete.columns[data.shape[1]:], axis=1, inplace=True)
+def unamed_headers_blanks(jpt_complete):
     
     headers = [jpt_complete.columns[0]] + ['' for i in range(jpt_complete.shape[1]-1)]
+    
     for col, hd in zip(jpt_complete.columns, headers):
         jpt_complete.rename(columns= {col : hd}, inplace=True)
 
@@ -90,9 +89,8 @@ class UploadFile:
             data = data.sort_index()
         
 
-        for row in range(len(data)):
-            description.loc[len(description)] = data.iloc[row]  #💡 description == jpt_complete
-
-        complete = delete_extra_columns_description(description, data)
+        description.drop(description.columns[data.shape[1]:], axis=1, inplace=True)
+        complete = pd.concat([description, data], axis=0)
+        complete = unamed_headers_blanks(complete)
 
         return complete
