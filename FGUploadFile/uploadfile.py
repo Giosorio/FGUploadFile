@@ -1,5 +1,6 @@
-import pandas as pd
+from datetime import datetime
 import os
+import pandas as pd
 
 
 def description(df):
@@ -94,3 +95,13 @@ class UploadFile:
         complete = unamed_headers_blanks(complete)
 
         return complete
+
+
+    def download_csv(self, f_name, comms='', set_datetime=True):
+        if set_datetime == True:
+            for i in self.description.index:
+                if 'Comments=' in self.description.iloc[i,0]:
+                    self.description.iloc[i,0] = f"Comments={comms} {datetime.now().strftime('%d/%m/%Y, %H:%M:%S')}"
+        
+        self.complete.to_csv(f_name, index=False)
+    
