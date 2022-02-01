@@ -57,6 +57,27 @@ print(upf_1.complete)
 8                                                A  ...        Legal_Entity_2
 9                                                A  ...        Legal_Entity_3
 10                                               A  ...        Legal_Entity_4
+```
+
+## Download CSV format, it marks the date and time the download is generated and allows you to put a comment (optional)
+```
+upf_1.download_csv('BU_UPLOAD.csv', comms='[COMMENT]')
+
+>>>
+                         Type=Business Unit Upload  ...                              
+0                                 Transaction=True  ...                   NaN
+1                 Language=English (United States)  ...                   NaN
+2   Number Format=#,##9.99 (Example: 1,234,567.99)  ...                   NaN
+3                           Date Format=MM/DD/YYYY  ...                   NaN
+4          Comments=[COMMENT] 01/02/2022, 19:46:17  ...                   NaN
+5                                              NaN  ...                   NaN
+6                                Modification Type  ...          Legal Entity
+7                                                A  ...        Legal_Entity_1
+8                                                A  ...        Legal_Entity_2
+9                                                A  ...        Legal_Entity_3
+10                                               A  ...        Legal_Entity_4
+```
+
 
 ```
 # HOW TO INSTALL IN YOUR ENVIRONMENT
