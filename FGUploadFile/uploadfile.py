@@ -56,7 +56,7 @@ def unamed_headers_blanks(jpt_complete):
     return jpt_complete
 
 
-def complete_(description, content, replace_headers = True):
+def complete_(description, content, replace_headers = True, unamed_hd=False):
     """concat_description_data 🚨 It has to be first export into a csv file before the concatenation 
     otherwise it will ignore the 2 last empty rows that description has"""
 
@@ -83,7 +83,8 @@ def complete_(description, content, replace_headers = True):
 
     description.drop(description.columns[data.shape[1]:], axis=1, inplace=True)
     complete = pd.concat([description, data], axis=0)
-    complete = unamed_headers_blanks(complete)
+    if unamed_hd is False:
+        complete = unamed_headers_blanks(complete)
 
     return complete
 
@@ -109,6 +110,14 @@ class UploadFile:
                 content_nb = content_nb.drop(columns=[col])
         
         return content_nb
+
+
+    @classmethod
+    def from_split(cls, description, content):
+        df = complete_(description, content, unamed_hd=True)
+        df.reset_index(inplace=True)
+        df.drop(columns='index', inplace=True)
+        return cls(df)
 
 
     @property
