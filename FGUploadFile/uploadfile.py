@@ -1,38 +1,49 @@
 from datetime import datetime
 import os
-import numpy as np
 import pandas as pd
 
 
-def index_hd_content(df):
-    for i, row in enumerate(df['Unnamed: 1'].isna()):
-        if row is False:
-            break
-
-    return i
-
-
 def description(df):
-    hd_index = index_hd_content(df)
-    description = df.drop(df.index[hd_index:])
+
+    counter = 0
+    for row in df['Unnamed: 1'].fillna(''):
+        if row != '':
+            break
+        counter +=1
+
+
+    description = df.copy().fillna('')
+    description = description.drop(description.index[counter:])
+    description = pd.DataFrame(description)
 
     return description
 
 
-def data(df):
-    hd_index = index_hd_content(df)
-    data = df.drop(df.index[:hd_index])
-    headers = df.loc[hd_index]
+def jp_data(df):
+    counter = 0
+    for row in df['Unnamed: 1'].fillna(''):
+        if row != '':
+            break
+        counter +=1
+
+
+    jp_data = df.copy().fillna('')
+    jp_data = jp_data.drop(jp_data.index[:counter])
+    headers = df.loc[counter]
     # print(headers)
 
-    for col_numbers, hd in zip(data.columns, headers):
-        data.rename(columns = {col_numbers : hd}, inplace = True)
 
-    data = data.drop(hd_index)
-    data.reset_index(inplace = True)
-    data.drop(columns= 'index', inplace = True)
+    for col_numbers, hd in zip(jp_data.columns, headers):
+        jp_data.rename(columns = {col_numbers : hd}, inplace = True)
 
-    return data
+
+    jp_data = jp_data.drop(counter)
+    jp_data = pd.DataFrame(jp_data)
+    jp_data.reset_index(inplace = True)
+    jp_data.drop(columns= 'index', inplace = True)
+    jp_data = jp_data.fillna('')
+
+    return jp_data
 
 
 def unamed_headers_blanks(jpt_complete):
@@ -83,7 +94,7 @@ class UploadFile:
     
     def __init__(self, df):
         self.description = description(df)
-        self.content = data(df)
+        self.content = jp_data(df)
 
 
     @property
@@ -122,9 +133,7 @@ class UploadFile:
     def download_csv(self, f_name, comms='', set_datetime=True, drop_empty_columns=False):
         if set_datetime == True:
             for i in self.description.index:
-                if self.description.iloc[i,0] is np.nan:
-                    continue
-                elif 'Comments=' in self.description.iloc[i,0]:
+                if 'Comments=' in self.description.iloc[i,0]:
                     self.description.iloc[i,0] = f"Comments={comms} {datetime.now().strftime('%d/%m/%Y, %H:%M:%S')}"
         
         if drop_empty_columns==True: 
