@@ -4,39 +4,31 @@ import numpy as np
 import pandas as pd
 
 
-def description(df):
-
-    counter = 0
-    for row in df['Unnamed: 1']:
-        if not row is np.nan:
+def index_hd_content(df):
+    for i, row in enumerate(df['Unnamed: 1'].isna()):
+        if row is False:
             break
-        counter +=1
+
+    return i
 
 
-    description = df.drop(df.index[counter:])
-    description = pd.DataFrame(description)
+def description(df):
+    hd_index = index_hd_content(df)
+    description = df.drop(df.index[hd_index:])
 
     return description
 
 
 def data(df):
-    counter = 0
-    for row in df['Unnamed: 1']:
-        if not row is np.nan:
-            break
-        counter +=1
-
-
-    data = df.drop(df.index[:counter])
-    headers = df.loc[counter]
+    hd_index = index_hd_content(df)
+    data = df.drop(df.index[:hd_index])
+    headers = df.loc[hd_index]
     # print(headers)
-
 
     for col_numbers, hd in zip(data.columns, headers):
         data.rename(columns = {col_numbers : hd}, inplace = True)
 
-
-    data = data.drop(counter)
+    data = data.drop(hd_index)
     data.reset_index(inplace = True)
     data.drop(columns= 'index', inplace = True)
 
@@ -139,3 +131,40 @@ class UploadFile:
             self.complete_nb.to_csv(f_name, index=False)
         else:
             self.complete.to_csv(f_name, index=False)
+
+
+    @classmethod
+    def split_files(cls, upload_File, file_names, records=50_000, drop_blank_columns=False):
+        def push_file(description, content, batch_num):
+            batch_U = cls.from_split(description, content)
+            batch_U.download_csv(f'{file_names} Batch{batch_num}.csv', comms=f'{file_names} Batch{batch_num}')
+                
+        
+        def batch_generator(final_index, batch_num, initial_index):
+            if final_index > last_index:
+                final_index = last_index
+                print('initial: {}, final: {}, batch_: {}'.format(initial_index, final_index-1, batch_num))
+                batch = df.iloc[initial_index:last_index+1, :]
+                push_file(upload_File.description, batch, batch_num)
+                return print('Done')
+            else:
+                print('initial: {}, final: {}, batch_: {}'.format(initial_index, final_index-1, batch_num))
+                batch = df.iloc[initial_index:final_index, :]
+                push_file(upload_File.description, batch, batch_num)
+                return batch_generator(final_index+records, batch_num+1, initial_index=final_index)
+
+
+        if drop_blank_columns is True:
+            df = upload_File.content_nb
+        else:
+            df = upload_File.content
+
+        df.reset_index(inplace=True)
+        df.drop(columns='index', inplace=True)
+
+        last_index = df.shape[0] - 1
+        initial_index = 0
+        final_index = records
+        batch_num = 1
+        
+        batch_generator(final_index, batch_num, initial_index)
